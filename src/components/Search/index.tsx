@@ -54,7 +54,6 @@ const Search = ({
   value: string,
 	onChange: (value: string) => void,
 }) => {
-  console.log('defaultValue', defaultValue)
   const [value, setValue] = useState(defaultValue)
   
   useEffect(() => {

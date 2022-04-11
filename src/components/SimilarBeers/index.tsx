@@ -23,24 +23,41 @@ const Wrap = styled.div`
 
 const Inner = styled.div`
   display: grid;
+  position: relative;
   width: 100%;
   justify-content: center;
   padding: 20px;
-  grid-template-columns: repeat(4, auto); 
-  grid-template-rows: repeat(4, auto);
+  grid-template-columns: repeat(3, auto); 
+  grid-template-rows: repeat(3, auto);
   grid-auto-columns: auto;
   grid-auto-rows: auto;
+  ::after {
+    content: '';
+    position: absolute;
+    height: 14px;
+    width: 100%;
+    background: #fff;
+    bottom: 10px;
+  }
+  
 `
 
 const Item = styled.div`
   display: flex;
+  position: relative;
   justify-content: center;
   flex-direction: column;
   height: 180px;
   width: 180px;
+  padding: 20px;
+`
+
+const ItemWrap = styled.div`
   border-bottom: 1px solid #ededed;
   border-right: 1px solid #ededed;
-  padding: 20px;
+  :nth-child(3n) {
+    border-right: none;
+  };
 `
 
 const Image = styled.img`
@@ -69,7 +86,6 @@ const SimilarBeers = (props: SimilarBeersProps) => {
     beer,
   } = props
 
-  console.log('similarBeers', similarBeers)
   const getAbv = (abv: number) => ({
     gt: `${(abv - 1 < 0 ? 0 : abv - 1 ).toFixed(2)}`,
     lt: `${(abv + 1 < 0 ? 0 : abv + 1 ).toFixed(2)}`,
@@ -101,23 +117,25 @@ const SimilarBeers = (props: SimilarBeersProps) => {
       </TitleWrap>
       <Inner>
         {similarBeers.map(item => (
-          <LinkWrap key={item.id}>
-            <Link to={`/beer/${item.id}`} reloadDocument={true}>
-              <Item>
-                <Image src={item?.image_url || ''} alt={`Beer: ${item?.name || ''}`} />
-                <TextWrap>
-                  <TextGrandS theme="beer">
-                    ABV: {item?.abv ? `${item.abv}%` : ''}
-                  </TextGrandS>
-                </TextWrap> 
-                <TextWrap>
-                  <TextGrandS theme="beer">
-                    IBU: {item?.ibu || ''}
-                  </TextGrandS>
-                </TextWrap> 
-              </Item>
-            </Link>
-          </LinkWrap>
+          <ItemWrap>
+            <LinkWrap key={item.id}>
+              <Link to={`/beer/${item.id}`} reloadDocument={true}>
+                <Item>
+                  <Image src={item?.image_url || ''} alt={`Beer: ${item?.name || ''}`} />
+                  <TextWrap>
+                    <TextGrandS theme="beer">
+                      ABV: {item?.abv ? `${item.abv}%` : ''}
+                    </TextGrandS>
+                  </TextWrap> 
+                  <TextWrap>
+                    <TextGrandS theme="beer">
+                      IBU: {item?.ibu || ''}
+                    </TextGrandS>
+                  </TextWrap> 
+                </Item>
+              </Link>
+            </LinkWrap>
+          </ItemWrap>
         ))}
       </Inner>
     </Wrap>

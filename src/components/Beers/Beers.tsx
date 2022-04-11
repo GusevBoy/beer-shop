@@ -24,6 +24,7 @@ type BeersProps = {
 }
 
 const Gap = styled.div`
+  position: relative;
   margin: 0 auto;
   width: 1200px;
   min-height: 1200px;
@@ -33,6 +34,14 @@ const Gap = styled.div`
   grid-auto-columns: auto;
   grid-auto-rows: auto;
   gap: 0px 0px;
+  ::after {
+    content: '';
+    position: absolute;
+    height: 14px;
+    width: 100%;
+    background: #fff;
+    bottom: 0px;
+  }
 `
 
 const Item = styled.div`
@@ -41,7 +50,7 @@ const Item = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  border-top: 1px solid #ededed;
+  border-bottom: 1px solid #ededed;
   border-right: 1px solid #ededed;
   height: 400px;
   width: 400px;
@@ -137,8 +146,6 @@ const Beers = (props: BeersProps) => {
     getBeers()
   }, [])
 
-  console.log('data 666 1 ', data)
-
   const loadMoreItems = () => {
     getBeers()
   }
@@ -214,15 +221,17 @@ const Beers = (props: BeersProps) => {
                 return (
                   <Item key={index}>
                     <ItemModal>
-                      <ItemModalButton top={100}>
+                      
                       <LinkWrap>
-                        <Link to={`beer/${item.id}`}>
-                          <TextS ls bold uppercase theme="beer">
-                            MORE INFO
-                          </TextS>
+                        <Link to={`beer/${item.id}`} reloadDocument={true}>
+                          <ItemModalButton top={100}>
+                            <TextS ls bold uppercase theme="beer">
+                              MORE INFO
+                            </TextS>
+                          </ItemModalButton>
                         </Link>
                       </LinkWrap>
-                      </ItemModalButton>
+                      
                       <ItemModalButton
                         top={141}
                         pointerNone={Boolean(amountItem)}

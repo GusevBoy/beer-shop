@@ -80,10 +80,9 @@ const Beer = (props: BeerProps) => {
         addedBeer(findBeer)
       } else {
         getBeer(id)
-        
       }
     }
-  }, [])
+  }, [] )
 
   const amountItemsCart = cart.items.reduce((accum, value) => value.amount + accum, 0)
   const amount = cart.items.find((item) => item.beer.id === beer?.id)?.amount || 0

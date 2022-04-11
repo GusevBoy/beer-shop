@@ -76,13 +76,6 @@ const beersReducer = (state = initialState, action: AnyAction): BeersStateType  
         }
       case CHANGE_OPTIONS: 
         {
-          console.log('action.payload', action.payload)
-          console.log('action.payload2', {
-            ...state,
-            ...(action.payload.name && {name: action.payload.name}),
-            ...(action.payload.brewedBefore && {brewedBefore: action.payload.brewedBefore}),
-            ...(action.payload.brewedAfter && {brewedAfter: action.payload.brewedAfter}),
-          })
           return {
             ...state,
             name: action.payload.name ? action.payload.name : '',
