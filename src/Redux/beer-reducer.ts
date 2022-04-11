@@ -4,31 +4,22 @@ import { BeerType, BeersType } from '../interfaces/beers';
 import { BeerStateType, SimilarType } from '../interfaces/beer';
 import { getSimilarBeers, getBeer } from '../API/beers';
 
+export const SIMILAR_BEERS = 'SIMILAR_BEERS'
 const SET_BEER = 'SET_BEER'
-const REMOVE_ITEM = 'REMOVE_ITEM'
-const DELETE_ITEM = 'DELETE_ITEM'
+const SET_SIMILAR_BEERS = 'SET_SIMILAR_BEERS'
 
-type PayloadBeerItem = {
-  item: BeerType,
-}
-
-type SerBeerActionType = {
+type SetBeerActionType = {
     type: typeof SET_BEER,
     payload: {
       beer: BeerType | null
     }
 }
-  
-type RemoveItemActionType = {
-    type: typeof REMOVE_ITEM,
-    payload: PayloadBeerItem
-}
 
-type DeleteItemActionType = {
-  type: typeof DELETE_ITEM,
-  payload: {
-    id: number,
-  }
+type SetSimilarBeersActionType = {
+    type: typeof SET_SIMILAR_BEERS,
+    payload: {
+      beers: BeersType
+    }
 }
 
 
@@ -47,12 +38,21 @@ const beerReducers = (state = initialState, action: AnyAction): BeerStateType  =
             beer,
           }
         }
+      case SET_SIMILAR_BEERS:
+        {
+          const { beers } = action.payload
+          return {
+            ...state,
+            similarBeers: beers,
+          }
+        }
       default:
           return state;
     }
 }
 
-export const addedBeer = (beer: BeerType): SerBeerActionType => ({type: SET_BEER, payload: { beer }})
+export const addedBeer = (beer: BeerType): SetBeerActionType => ({type: SET_BEER, payload: { beer }})
+export const setSimilarBeers = (beers: BeersType): SetSimilarBeersActionType => ({type: SET_SIMILAR_BEERS, payload: { beers }})
 
 export const getBeerThunk = (dispatch: ThunkDispatch<{}, {}, AnyAction>, id: string) => {
   getBeer(id).then((result: { data: BeersType}) => {
@@ -61,10 +61,11 @@ export const getBeerThunk = (dispatch: ThunkDispatch<{}, {}, AnyAction>, id: str
   })
 }
 
-export const getSimilarBeersThunk = (dispatch: ThunkDispatch<{}, {}, AnyAction>, abv: SimilarType, ibu: SimilarType) => {
+export const getSimilarBeersThunk = (dispatch: ThunkDispatch<{}, {}, AnyAction>, abv: SimilarType, ibu: SimilarType, id: string) => {
   getSimilarBeers(abv, ibu).then((result: { data: BeersType}) => {
     const { data } = result
-    console.log('result', result)
+    localStorage.setItem(`${SIMILAR_BEERS}_${id}`, JSON.stringify(data))
+    dispatch(setSimilarBeers(data))
   })
 }
 

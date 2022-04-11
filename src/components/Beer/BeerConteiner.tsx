@@ -1,9 +1,9 @@
 
 import { connect } from 'react-redux';
 import Beer from './Beer';
-import { getBeerThunk, addedBeer, getSimilarBeersThunk } from '../../Redux/beer-reducer'
+import { getBeerThunk, addedBeer, getSimilarBeersThunk, setSimilarBeers } from '../../Redux/beer-reducer'
 import { RootState, AppDispatch } from '../../Redux/redux-store';
-import { BeerType } from '../../interfaces/beers';
+import { BeerType, BeersType } from '../../interfaces/beers';
 import { SimilarType } from '../../interfaces/beer';
 import { addedItemActionCreator, removeItemActionCreator } from '../../Redux/cart-reducer'
 function mapStateToProps(state: RootState) {
@@ -27,7 +27,8 @@ const mergeProps = (stateProps: RootState, dispatchProps: { dispatch: AppDispatc
       beers: beers.data,
       cart: cart,
       getBeer: (id: string) => getBeerThunk(dispatch, id),
-      getSimilarBeers: (abv: SimilarType, ibu: SimilarType) => getSimilarBeersThunk(dispatch, abv, ibu),
+      getSimilarBeers: (abv: SimilarType, ibu: SimilarType, id: string) => getSimilarBeersThunk(dispatch, abv, ibu, id),
+      setSimilarBeers: (beers: BeersType) => dispatch(setSimilarBeers(beers)),
       addedBeer: (item: BeerType) => dispatch(addedBeer(item)),
       addCartItem: (item: BeerType) => {
         dispatch(addedItemActionCreator(item))

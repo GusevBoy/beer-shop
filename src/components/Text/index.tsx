@@ -116,6 +116,14 @@ export const TitleGrandBeer = styled(TitleBeer)`
   text-transform: none;
 `
 
+export const TitleBigGrandBeer = styled(TitleBeer)`
+  font-family: 'GrandHotel', sans-serif;
+  font-weight: normal;
+  font-size: 40px;
+  letter-spacing: normal;
+  text-transform: none;
+`
+
 export const TitleWelcome = styled.span`
 	font-size: 44px;
 	letter-spacing: .3em;

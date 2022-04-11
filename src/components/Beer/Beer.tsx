@@ -4,6 +4,7 @@ import { TitleBeerCard, TextSM, SubTitleWelcome, TextGrandS, TextGrandM, TextL }
 import Counter from '../Counter'
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import SimilarBeersComponet  from '../SimilarBeers'
 import { BeersType, BeerType } from '../../interfaces/beers'
 import { SimilarType } from '../../interfaces/beer';
 import { CartStateType } from '../../interfaces/cart'
@@ -14,10 +15,11 @@ type BeerProps = {
   similarBeers: BeersType,
   beers: BeersType,
   getBeer: (id: string) => void,
-  getSimilarBeers: (abv: SimilarType, ibu: SimilarType) => void,
+  getSimilarBeers: (abv: SimilarType, ibu: SimilarType, id: string) => void,
   addedBeer: (item: BeerType) => void,
   addCartItem: (item: BeerType) => void,
   removeCartItem: (item: BeerType) => void,
+  setSimilarBeers: (item: BeersType) => void,
 }
 
 const Wrap = styled.div`
@@ -29,6 +31,7 @@ const Inner = styled.div`
   align-items: center;
   margin: 60px auto 0;
   width: max-content;
+  margin-bottom: 150px;
 
 `
 
@@ -58,28 +61,20 @@ const Beer = (props: BeerProps) => {
     getBeer,
     getSimilarBeers,
     addedBeer,
+    similarBeers,
     beers,
     beer,
     cart,
     addCartItem,
-    removeCartItem
+    removeCartItem,
+    setSimilarBeers,
   } = props
   let { id } = useParams();
 
 
-  const getAbv = (abv: number) => ({
-    gt: `${(abv - 1 < 0 ? 0 : abv - 1 ).toFixed(2)}`,
-    lt: `${(abv + 1 < 0 ? 0 : abv + 1 ).toFixed(2)}`,
-  })
-
-  const getIbu = (ibu: number) => ({
-    gt: `${(ibu - 10 < 0 ? 0 : ibu - 10 ).toFixed(2)}`,
-    lt: `${(ibu + 10 < 0 ? 0 : ibu + 10 ).toFixed(2)}`,
-  })
-
   useEffect(() => {
     if(id) {
-
+      window.scrollTo({top: 0});
       const findBeer = beers.find((item) => item.id === Number(id))
       if(findBeer) {
         addedBeer(findBeer)
@@ -90,11 +85,6 @@ const Beer = (props: BeerProps) => {
     }
   }, [])
 
-  useEffect(() => {
-    if(beer) {
-      getSimilarBeers(getAbv(beer.abv), getIbu(beer.abv))
-    } 
-  }, [beer])
   const amountItemsCart = cart.items.reduce((accum, value) => value.amount + accum, 0)
   const amount = cart.items.find((item) => item.beer.id === beer?.id)?.amount || 0
   return (
@@ -140,6 +130,12 @@ const Beer = (props: BeerProps) => {
             </div>
         </Description>
       </Inner>
+      <SimilarBeersComponet
+        beer={beer}
+        similarBeers={similarBeers}
+        getSimilarBeers={getSimilarBeers}
+        setSimilarBeers={setSimilarBeers}
+      />
     </Wrap>
   );
 }
